@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' data: blob:; connect-src 'self' data: blob:; worker-src 'self' blob:; manifest-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>ASCII Art — Image to ASCII &amp; Big Text Banners, Free | S3eidat Tools</title>
+<meta name="description" content="Turn photos into ASCII art (character ramps, width, contrast, invert, colour) and type text as big banner letters. Copy as text, download .txt or PNG. Free, nothing uploaded.">
+<meta property="og:title" content="ASCII Art — image to ASCII and text banners">
+<meta property="og:description" content="Convert images to ASCII art and make big text banners. Runs 100% in your browser.">
+<link rel="icon" href="kit/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="app.css">
+<script src="kit/kit.js"></script>
+<!--s3:seo-->
+<link rel="canonical" href="https://s3eidat.github.io/ascii-art/">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0f12">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="S3eidat Tools">
+<meta property="og:url" content="https://s3eidat.github.io/ascii-art/">
+<meta property="og:image" content="https://s3eidat.github.io/ascii-art/screenshot.png">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="800">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ASCII Art — Turn images and text into ASCII art">
+<meta name="twitter:description" content="Turn images and text into ASCII art. Free, private and runs 100% in your browser: no sign-up, no uploads.">
+<meta name="twitter:image" content="https://s3eidat.github.io/ascii-art/screenshot.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "ASCII Art", "url": "https://s3eidat.github.io/ascii-art/", "description": "Turn images and text into ASCII art. Free, private and runs 100% in your browser: no sign-up, no uploads.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "image": "https://s3eidat.github.io/ascii-art/screenshot.png", "author": {"@type": "Person", "name": "s3eidat", "url": "https://github.com/s3eidat"}}</script>
+<!--/s3:seo-->
+</head>
+<body data-tool="ascii-art">
+<main class="s3-main">
+  <section class="s3-hero">
+    <h1>ASCII Art</h1>
+    <p>Turn any picture into ASCII art, or type a word and get it as big banner letters. Copy it as plain text or save a PNG. Your images stay on your device.</p>
+  </section>
+
+  <section class="card aa-card">
+    <div class="aa-controls stack">
+      <h2>Image to ASCII</h2>
+      <label class="drop aa-drop" id="drop">
+        <input type="file" hidden>
+        <svg class="i"><use href="#i-image"/></svg>
+        <b id="dropTitle">Drop an image</b>
+        <span>or click, or paste with <kbd>Ctrl</kbd>+<kbd>V</kbd></span>
+      </label>
+      <label class="field aa-range">Width <span class="aa-val" id="colsV">100 characters</span><input type="range" id="cols" min="20" max="240" step="2" value="100"></label>
+      <label class="field">Characters
+        <select class="select" id="ramp">
+          <option value="standard">Standard  .:-=+*#%@</option>
+          <option value="detailed">Detailed (70 levels)</option>
+          <option value="blocks">Blocks ░▒▓█</option>
+          <option value="simple">Simple  .oO@</option>
+          <option value="binary">Binary 0 1</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </label>
+      <label class="field" id="customWrap" hidden>Your characters, light to dark
+        <input class="input mono" id="custom" value=" .oO0@" spellcheck="false" autocomplete="off">
+      </label>
+      <label class="field aa-range">Contrast <span class="aa-val" id="conV">0</span><input type="range" id="con" min="-60" max="100" step="5" value="0"></label>
+      <label class="field aa-range">Brightness <span class="aa-val" id="briV">0</span><input type="range" id="bri" min="-50" max="50" step="5" value="0"></label>
+      <div class="row">
+        <label class="check"><input type="checkbox" id="invert"> Invert (for dark backgrounds)</label>
+        <label class="check"><input type="checkbox" id="color"> Colour</label>
+      </div>
+    </div>
+    <div class="aa-outcol stack">
+      <div class="row between">
+        <span class="chip" id="imgInfo">No image yet</span>
+        <div class="row">
+          <button class="btn small" id="copyImg"><svg class="i"><use href="#i-copy"/></svg>Copy</button>
+          <button class="btn small" id="txtImg"><svg class="i"><use href="#i-download"/></svg>.txt</button>
+          <button class="btn small primary" id="pngImg"><svg class="i"><use href="#i-download"/></svg>.png</button>
+        </div>
+      </div>
+      <div class="aa-out" id="imgOut" tabindex="0" aria-label="ASCII art output">
+        <pre class="aa-pre" id="imgPre"></pre>
+        <canvas id="imgCanvas" hidden></canvas>
+        <p class="empty" id="imgEmpty"><b>Your ASCII art appears here</b>Drop a photo, logo or screenshot. Simple shapes with good contrast work best.</p>
+      </div>
+      <p class="faint aa-note" id="colorNote" hidden>Colour shows in the preview and the PNG; copied text is plain.</p>
+    </div>
+  </section>
+
+  <section class="card stack mt">
+    <div class="row between">
+      <h2>Text banner</h2>
+      <div class="row">
+        <button class="btn small" id="copyTxt"><svg class="i"><use href="#i-copy"/></svg>Copy</button>
+        <button class="btn small" id="txtTxt"><svg class="i"><use href="#i-download"/></svg>.txt</button>
+        <button class="btn small primary" id="pngTxt"><svg class="i"><use href="#i-download"/></svg>.png</button>
+      </div>
+    </div>
+    <div class="aa-banner-opts">
+      <label class="field aa-text">Text (A–Z, 0–9, basic punctuation; new line = new banner line)
+        <textarea class="textarea" id="btext" rows="2" maxlength="120" spellcheck="false">HELLO</textarea>
+      </label>
+      <label class="field">Font
+        <select class="select" id="font">
+          <option value="block">Block</option>
+          <option value="shadow">Shadow</option>
+          <option value="char">Character</option>
+          <option value="compact">Compact</option>
+          <option value="small">Small</option>
+          <option value="tiny">Tiny</option>
+        </select>
+      </label>
+      <label class="field" id="fillWrap">Fill character
+        <input class="input mono" id="fill" value="#" maxlength="2" spellcheck="false" autocomplete="off">
+      </label>
+    </div>
+    <div class="aa-out aa-bout"><pre class="aa-pre" id="bannerPre" tabindex="0" aria-label="Banner output"></pre></div>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
